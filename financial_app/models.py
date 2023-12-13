@@ -78,11 +78,11 @@ class FinancialData(models.Model):
 
     def calculate_current_ratio(self):
         calculate_current_ratio = self.total_sale / self.calculate_expense()
-        return calculate_current_ratio
+        return f'{calculate_current_ratio:2f}'
     
     def debit_equity_ratio(self):
         debit_equity_ratio =  self.calculate_expense()/ self.revenue
-        return  debit_equity_ratio
+        return  f'{debit_equity_ratio:2f}'
     
     def save(self, *args, **kwargs):
         # Calculate total expense using the related Expense instances
