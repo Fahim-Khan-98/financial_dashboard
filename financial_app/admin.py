@@ -13,7 +13,7 @@ class ExpenseAdmin(admin.ModelAdmin):
 
 @admin.register(FinancialData)
 class FinancialDataAdmin(admin.ModelAdmin):
-    list_display = ['company_id', 'user', 'year', 'revenue', 'total_sale', 'total_expense', 'net_income' ]
+    list_display = ['company_id', 'year', 'revenue', 'total_sale', 'total_expense', 'net_income', 'current_ratio', 'debt_to_equity_ratio' ]
     list_filter = ['company_id', 'year']
 
 

@@ -49,8 +49,8 @@ class FinancialData(models.Model):
     revenue = models.FloatField(blank=False)
     total_sale = models.FloatField(blank=True, null=True)
     net_income = models.FloatField(blank=True, null=True, editable=False)
-    current_ratio = models.FloatField()
-    debt_to_equity_ratio = models.FloatField()
+    current_ratio = models.FloatField(editable=False)
+    debt_to_equity_ratio = models.FloatField(editable=False)
     total_expense = models.FloatField(blank=True, null=True, editable=False)  # New field for total expense
     
 
@@ -66,20 +66,31 @@ class FinancialData(models.Model):
         calculate_expense = Expense.objects.filter(company_id=self.company_id).aggregate(total=Sum('amount')).get('total', 0)
         return calculate_expense
     
-    def calculate_total_expense(self):
+    def calculate_expense_revenue(self):
         calculate_total_expense = self.revenue+self.calculate_expense()
         return calculate_total_expense
 
     
     def calculate_net_income(self):
-        calculate_net_income = self.total_sale - self.calculate_total_expense()
+        calculate_net_income = self.total_sale - self.calculate_expense_revenue()
         return calculate_net_income
+    
+
+    def calculate_current_ratio(self):
+        calculate_current_ratio = self.total_sale / self.calculate_expense()
+        return calculate_current_ratio
+    
+    def debit_equity_ratio(self):
+        debit_equity_ratio =  self.calculate_expense()/ self.revenue
+        return  debit_equity_ratio
     
     def save(self, *args, **kwargs):
         # Calculate total expense using the related Expense instances
         
-        self.total_expense = self.calculate_total_expense()
+        self.total_expense = self.calculate_expense_revenue()
         self.net_income = self.calculate_net_income()
+        self.current_ratio = self.calculate_current_ratio()
+        self.debt_to_equity_ratio = self.debit_equity_ratio()
 
         # Call the original save method
         super(FinancialData, self).save(*args, **kwargs)
