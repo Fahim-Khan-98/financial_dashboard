@@ -13,12 +13,14 @@ class Company(models.Model):
     def __str__(self):
         return self.company_name
 
+
 class ExpenseCategory(models.Model):
     category_id = models.AutoField(primary_key=True)
     category_name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.category_name
+
 
 class Expense(models.Model):
     expense_iD = models.AutoField(primary_key=True)
@@ -27,18 +29,9 @@ class Expense(models.Model):
     amount = models.FloatField()
     date = models.DateField()
 
-
-
-
-    
-
-
-
     def __str__(self):
         return f'{self.company_id.company_name} {self.category_id.category_name} cost {self.amount}'
     
-    
-
 
 
 class FinancialData(models.Model):
@@ -52,12 +45,7 @@ class FinancialData(models.Model):
     current_ratio = models.FloatField(editable=False)
     debt_to_equity_ratio = models.FloatField(editable=False)
     total_expense = models.FloatField(blank=True, null=True, editable=False)  # New field for total expense
-    
 
-    # def save(self, *args, **kwargs):
-    #     # Calculate NetIncome before saving
-    #     self.NetIncome = self.Revenue - self.Expenses
-    #     super(FinancialData, self).save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.company_id.company_name} {self.data_id} total expense {self.total_expense}'
@@ -94,28 +82,3 @@ class FinancialData(models.Model):
 
         # Call the original save method
         super(FinancialData, self).save(*args, **kwargs)
-
-
-
-
-
-# class MonthlyExpense(models.Model):
-#     MonthlyExpenseID = models.AutoField(primary_key=True)
-#     CompanyID = models.ForeignKey(Company, on_delete=models.CASCADE)
-#     ExpenseID = models.ForeignKey(Expense, on_delete=models.CASCADE)
-#     Year = models.IntegerField()
-#     Month = models.IntegerField()
-#     Amount = models.FloatField()
-
-#     def __str__(self):
-#         return f'{self.CompanyID.CompanyName} {self.MonthlyExpenseID}'
-
-# class YearlyExpense(models.Model):
-#     YearlyExpenseID = models.AutoField(primary_key=True)
-#     CompanyID = models.ForeignKey(Company, on_delete=models.CASCADE)
-#     ExpenseID = models.ForeignKey(Expense, on_delete=models.CASCADE)
-#     Year = models.IntegerField()
-#     Amount = models.FloatField()
-
-#     def __str__(self):
-#         return f'{self.CompanyID.CompanyName} {self.YearlyExpenseID}'
